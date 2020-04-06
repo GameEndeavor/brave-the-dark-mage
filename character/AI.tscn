@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://character/Character.tscn" type="PackedScene" id=1]
+[ext_resource path="res://character/AI.gd" type="Script" id=2]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec4 flash_color : hint_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float flash_modifier = 0.0;
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	color.rgb = mix(color.rgb, flash_color.rgb, flash_modifier);
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/flash_color = Color( 1, 1, 1, 1 )
+shader_param/flash_modifier = 0.0
+
+[node name="AI" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+move_speed_units = 4
+
+[node name="Body" parent="." index="1"]
+material = SubResource( 2 )
+
+[node name="StunTimer" parent="Timers" index="0"]
+wait_time = 0.5
+one_shot = true

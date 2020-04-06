@@ -1,0 +1,10 @@
+[gd_scene format=2]
+
+[node name="TileEntity" type="Node2D"]
+
+[node name="Body" type="Node2D" parent="."]
+
+[node name="Shadow" type="Sprite" parent="Body"]
+z_index = -1
+
+[node name="TreeSprite" type="Sprite" parent="Body"]

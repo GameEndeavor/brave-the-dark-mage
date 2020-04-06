@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://ui/StatusBar.gd" type="Script" id=1]
+[ext_resource path="res://assets/textures/ui/player_health_bar.png" type="Texture" id=2]
+
+[sub_resource type="AtlasTexture" id=1]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 48, 6 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 6, 48, 6 )
+
+[node name="StatusBar" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TopBar" type="TextureProgress" parent="."]
+margin_right = 40.0
+margin_bottom = 40.0
+value = 50.0
+texture_under = SubResource( 1 )
+texture_progress = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

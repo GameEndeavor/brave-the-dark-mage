@@ -1,0 +1,34 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/bitmask_image.png-2c67e41a8ea9191d2edc0e696a49f584.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://addons/tile_buddy/bitmask_image.png"
+dest_files=[ "res://.import/bitmask_image.png-2c67e41a8ea9191d2edc0e696a49f584.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=false
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+stream=false
+size_limit=0
+detect_3d=false
+svg/scale=1.0
