@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://character/Character.tscn" type="PackedScene" id=1]
 [ext_resource path="res://character/Player.gd" type="Script" id=2]
@@ -7,6 +7,8 @@
 [ext_resource path="res://assets/textures/character/hand.png" type="Texture" id=5]
 [ext_resource path="res://character/PlayerFSM.gd" type="Script" id=6]
 [ext_resource path="res://assets/fonts/FredokaOne-Regular.ttf" type="DynamicFontData" id=7]
+[ext_resource path="res://assets/audio/player_hurt.wav" type="AudioStream" id=8]
+[ext_resource path="res://assets/audio/heal.wav" type="AudioStream" id=9]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -20,19 +22,19 @@ void fragment() {
 	COLOR = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=4]
+[sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
 shader = SubResource( 1 )
 shader_param/flash_color = Color( 1, 1, 1, 1 )
 shader_param/flash_modifier = 0.0
 
-[sub_resource type="RectangleShape2D" id=5]
+[sub_resource type="RectangleShape2D" id=3]
 extents = Vector2( 6, 4 )
 
-[sub_resource type="RectangleShape2D" id=2]
+[sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 4, 6 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=5]
 size = 8
 font_data = ExtResource( 7 )
 
@@ -49,7 +51,7 @@ move_speed_units = 6
 script = ExtResource( 6 )
 
 [node name="Body" parent="." index="1"]
-material = SubResource( 4 )
+material = SubResource( 2 )
 
 [node name="Shadow" type="Sprite" parent="Body" index="0"]
 texture = ExtResource( 4 )
@@ -61,7 +63,7 @@ offset = Vector2( 0, -12 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
 position = Vector2( 0, -4 )
-shape = SubResource( 5 )
+shape = SubResource( 3 )
 
 [node name="Hitbox" parent="." index="3"]
 collision_mask = 1024
@@ -69,7 +71,7 @@ immunity_duration = 0.4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="0"]
 position = Vector2( 0, -8 )
-shape = SubResource( 2 )
+shape = SubResource( 4 )
 
 [node name="HandPivot" type="Position2D" parent="." index="4"]
 position = Vector2( 0, -8 )
@@ -87,12 +89,13 @@ one_shot = true
 [node name="JumpTween" type="Tween" parent="Tweens" index="1"]
 
 [node name="StateLabel" type="Label" parent="." index="7"]
+visible = false
 margin_left = -32.0
 margin_top = -37.0
 margin_right = 32.0
 margin_bottom = -5.0
 rect_min_size = Vector2( 64, 32 )
-custom_fonts/font = SubResource( 3 )
+custom_fonts/font = SubResource( 5 )
 text = "State"
 align = 1
 valign = 1
@@ -107,5 +110,11 @@ collision_mask = 4096
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea" index="0"]
 shape = SubResource( 6 )
+
+[node name="Hurt" parent="." index="11"]
+stream = ExtResource( 8 )
+
+[node name="Heal" type="AudioStreamPlayer" parent="." index="12"]
+stream = ExtResource( 9 )
 [connection signal="roll_finished" from="." to="StateMachine" method="_on_Player_roll_finished"]
 [connection signal="area_entered" from="PickupArea" to="." method="_on_PickupArea_area_entered"]

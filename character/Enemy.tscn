@@ -4,7 +4,7 @@
 [ext_resource path="res://character/Enemy.gd" type="Script" id=2]
 [ext_resource path="res://weapons/DamageArea.tscn" type="PackedScene" id=3]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="Shader" id=4]
 code = "shader_type canvas_item;
 
 uniform vec4 flash_color : hint_color = vec4(1.0, 1.0, 1.0, 1.0);
@@ -16,9 +16,9 @@ void fragment() {
 	COLOR = color;
 }"
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="ShaderMaterial" id=5]
 resource_local_to_scene = true
-shader = SubResource( 1 )
+shader = SubResource( 4 )
 shader_param/flash_color = Color( 1, 1, 1, 1 )
 shader_param/flash_modifier = 0.0
 
@@ -30,7 +30,7 @@ target_group = "players"
 script = null
 
 [node name="Body" parent="." index="1"]
-material = SubResource( 2 )
+material = SubResource( 5 )
 
 [node name="Hitbox" parent="." index="2"]
 collision_mask = 2048

@@ -1,12 +1,24 @@
 extends Character
 class_name AI
 
+onready var reaction_delay = $Timers/ReactionDelay
+
 var detection_radius := 6.0 * 16
 export var attack_radius_units := 0.5
 var target_ref = null setget set_target
 
 export var target_group = ""
 
+func update_facing():
+	var target = get_target()
+	if target != null:
+		var direction = sign(target.global_position.x - global_position.x)
+		if direction == 0:
+			direction = 1
+		set_facing(direction)
+
+func set_facing(value):
+	body.scale.x = value
 
 func get_nearest_target(target_group : String):
 	var targets = get_tree().get_nodes_in_group(target_group)
@@ -21,8 +33,8 @@ func get_nearest_target(target_group : String):
 	
 	return nearest_target
 
-func _on_damage():
-	._on_damage()
+func _on_damaged():
+	._on_damaged()
 	stun()
 
 func set_target(value):
@@ -45,10 +57,10 @@ var aggro_radius_units = 8
 func update_target():
 	var target = get_target()
 	
-	if target != null:
-		var distance = (target.global_position - global_position).length()
-		if distance > aggro_radius_units * 16:
-			set_target(null)
+#	if target != null:
+#		var distance = (target.global_position - global_position).length()
+#		if distance > aggro_radius_units * 16:
+#			set_target(null)
 	
 	var nearest_target = get_nearest_target(target_group)
 	

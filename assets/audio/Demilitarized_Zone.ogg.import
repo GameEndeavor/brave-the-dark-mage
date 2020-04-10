@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/Demilitarized_Zone.ogg-b01cd9640e171a2e9cf0afad85665fd1.oggstr"
+
+[deps]
+
+source_file="res://assets/audio/Demilitarized_Zone.ogg"
+dest_files=[ "res://.import/Demilitarized_Zone.ogg-b01cd9640e171a2e9cf0afad85665fd1.oggstr" ]
+
+[params]
+
+loop=true
+loop_offset=0

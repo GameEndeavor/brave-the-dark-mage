@@ -1,0 +1,24 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://character/Vein.gd" type="Script" id=1]
+
+[sub_resource type="Curve" id=7]
+_data = [ Vector2( 0, 1 ), 0.0, -0.34, 0, 0, Vector2( 1, 0 ), -1.872, 0.0, 0, 0 ]
+
+[node name="Vein" type="Node2D"]
+script = ExtResource( 1 )
+shadow_path = NodePath("Shadow")
+
+[node name="Shadow" type="Line2D" parent="."]
+position = Vector2( 0, 1 )
+width = 3.0
+width_curve = SubResource( 7 )
+default_color = Color( 0, 0, 0, 0.376471 )
+
+[node name="Line2D" type="Line2D" parent="."]
+width = 3.0
+width_curve = SubResource( 7 )
+default_color = Color( 0.662745, 0.2, 0.243137, 1 )
+joint_mode = 2
+round_precision = 12
+antialiased = true

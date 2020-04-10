@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://character/Character.gd" type="Script" id=1]
 [ext_resource path="res://weapons/Hitbox.tscn" type="PackedScene" id=2]
 [ext_resource path="res://CharacterFSM.gd" type="Script" id=3]
+[ext_resource path="res://assets/audio/Hit_Hurt81.wav" type="AudioStream" id=4]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -54,12 +55,20 @@ material = SubResource( 2 )
 
 [node name="StunTimer" type="Timer" parent="Timers"]
 
+[node name="BubbleTimer" type="Timer" parent="Timers"]
+wait_time = 3.0
+one_shot = true
+
 [node name="Tweens" type="Node" parent="."]
 
 [node name="DamageAnimator" type="AnimationPlayer" parent="."]
 anims/damage = SubResource( 3 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[node name="Hurt" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )
 [connection signal="stunned" from="." to="StateMachine" method="_on_stun"]
 [connection signal="damaged" from="Hitbox" to="." method="_on_Hitbox_damaged"]
 [connection signal="timeout" from="Timers/StunTimer" to="StateMachine" method="_on_stun_timeout"]
+[connection signal="timeout" from="Timers/BubbleTimer" to="." method="_on_BubbleTimer_timeout"]

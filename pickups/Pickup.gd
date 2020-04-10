@@ -26,7 +26,10 @@ func spawn(angle = rand_range(-PI, PI), speed = 2.0 * 16, z_velocity = -50, init
 func destroy():
 	queue_free()
 
+func pickup(picker_upper):
+	_on_pickup(picker_upper)
+	destroy()
+
 func _on_pickup(picker_upper):
 	if picker_upper.has_method("heal"):
 		picker_upper.heal(3)
-	destroy()

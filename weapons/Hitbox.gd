@@ -25,7 +25,9 @@ func _on_Hitbox_area_entered(area):
 	
 	if area is DamageArea:
 		# TODO: Add immunity
-		damage(area.damage_amount, area.knockback_strength, area, area.attacker)
+		if !(self in area.exceptions):
+			damage(area.damage_amount, area.knockback_strength, area, area.attacker)
+			area.on_hit(self)
 
 func damage(amount, knockback, source, attacker):
 	emit_signal("damaged", amount, knockback, source, attacker)

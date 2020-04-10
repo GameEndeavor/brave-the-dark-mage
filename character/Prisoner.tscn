@@ -1,0 +1,64 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://character/AI.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/textures/character/shadow.png" type="Texture" id=2]
+[ext_resource path="res://assets/textures/character/prisoner.png" type="Texture" id=3]
+[ext_resource path="res://character/PrisonerFSM.gd" type="Script" id=4]
+[ext_resource path="res://character/Prisoner.gd" type="Script" id=5]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+uniform vec4 flash_color : hint_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float flash_modifier = 0.0;
+
+void fragment() {
+	vec4 color = texture(TEXTURE, UV);
+	color.rgb = mix(color.rgb, flash_color.rgb, flash_modifier);
+	COLOR = color;
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+resource_local_to_scene = true
+shader = SubResource( 1 )
+shader_param/flash_color = Color( 1, 1, 1, 1 )
+shader_param/flash_modifier = 0.0
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 6, 4 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 8, 12 )
+
+[node name="Prisoner" groups=[
+"prisoners",
+] instance=ExtResource( 1 )]
+script = ExtResource( 5 )
+move_speed_units = 8
+max_health = 3
+
+[node name="StateMachine" parent="." index="0"]
+script = ExtResource( 4 )
+
+[node name="Body" parent="." index="1"]
+material = SubResource( 2 )
+
+[node name="Shadow" type="Sprite" parent="Body" index="0"]
+texture = ExtResource( 2 )
+
+[node name="Character" type="Sprite" parent="Body" index="1"]
+use_parent_material = true
+position = Vector2( 0, -3 )
+texture = ExtResource( 3 )
+offset = Vector2( 0, -8 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." index="2"]
+position = Vector2( 0, -4 )
+shape = SubResource( 3 )
+
+[node name="Hitbox" parent="." index="3"]
+collision_mask = 2048
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" index="1"]
+position = Vector2( 0, -11 )
+shape = SubResource( 4 )

@@ -29,5 +29,9 @@ move_speed_units = 4
 material = SubResource( 2 )
 
 [node name="StunTimer" parent="Timers" index="0"]
-wait_time = 0.5
+wait_time = 0.2
+one_shot = true
+
+[node name="ReactionDelay" type="Timer" parent="Timers" index="1"]
+wait_time = 0.4
 one_shot = true

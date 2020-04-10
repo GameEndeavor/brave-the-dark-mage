@@ -1,4 +1,5 @@
 extends Character
+class_name Player
 
 signal attacked()
 signal attack_finished()
@@ -24,6 +25,7 @@ var jump_duration = 0.4
 var move_input : Vector2
 var facing := Vector2.RIGHT
 var roll_velocity = 10 * 16
+var is_weapon_thrown = false
 
 func _ready():
 	set_weapon(preload("res://weapons/Weapon.tscn").instance())
@@ -32,9 +34,11 @@ func _ready():
 func _input(event):
 	if event.is_action_pressed("attack"):
 		attack()
+	elif event.is_action_pressed("secondary_attack"):
+		secondary_attack()
 
 func make_connections():
-	var health_bar = Globals.map.hud.health_bar
+	var health_bar = Globals.game.hud.health_bar
 	connect("health_changed", health_bar, "_on_value_changed")
 	connect("max_health_changed", health_bar, "_on_max_value_changed")
 	health_bar._on_value_changed(health)
@@ -62,14 +66,14 @@ func apply_roll_velocity():
 func heal(amount):
 	amount = max(amount, 0)
 	set_health(health + amount)
+	if !$Heal.playing:
+		$Heal.play()
 
 func aim_weapon():
 	var mouse_angle = (get_global_mouse_position() - hand_pivot.global_position).angle()
 	hand_pivot.rotation = mouse_angle
-	var attack_angle = attack_angle_range * attack_modifier
-	hand.position = polar2cartesian(hand.position.length(), attack_angle)
 	if weapon != null:
-		weapon.rotation = PI * attack_modifier
+		hand.transform = weapon.get_hand_transform(attack_modifier)
 		hand_pivot.show_behind_parent = weapon.global_position.y < hand_pivot.global_position.y
 
 func set_weapon(weapon):
@@ -87,7 +91,7 @@ func set_weapon(weapon):
 	connect("attack_finished", weapon, "_on_attack_finished")
 
 func attack():
-	if !attack_tween.is_active() && state_machine.can_attack():
+	if !attack_tween.is_active() && state_machine.can_attack() && !is_weapon_thrown:
 		emit_signal("attacked")
 		attack_tween.interpolate_property(self, "attack_modifier", \
 			attack_modifier, -attack_modifier, attack_duration, \
@@ -96,6 +100,23 @@ func attack():
 		attack_tween.start()
 	else:
 		attack_buffer.start()
+
+
+func secondary_attack():
+	if !is_weapon_thrown:
+		is_weapon_thrown = true
+		weapon.hide()
+		var projectile = preload("res://WeaponProjectile.tscn").instance()
+		Globals.map.add_entity(projectile)
+		projectile.global_transform = weapon.global_transform
+		var displacement = get_global_mouse_position() - projectile.global_position
+		projectile.set_weapon_ref(weapon)
+		projectile.throw(displacement.angle())
+		projectile.connect("returned", self, "_on_weapon_returned")
+
+func _on_weapon_returned():
+	weapon.show()
+	is_weapon_thrown = false
 
 func roll():
 	jump_tween.interpolate_property(character_sprite, "position:y", 0, jump_height, \
@@ -123,3 +144,9 @@ func _on_attack_finished():
 func _on_PickupArea_area_entered(area):
 	if area.has_method("pickup"):
 		area.pickup(self)
+
+func on_portal_enter(portal):
+	Globals.game.start_next_level()
+
+func _on_destroyed():
+	Globals.game.restart_level()
