@@ -19,7 +19,6 @@ var level_id = 0
 func _ready():
 	Globals.game = self
 	load_level(LEVELS[starting_level])
-	Input.set_mouse_mode(Input.MOUSE_MODE_HIDDEN)
 
 func start_next_level():
 	level_id += 1
